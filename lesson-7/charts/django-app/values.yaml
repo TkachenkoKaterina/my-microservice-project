@@ -1,0 +1,19 @@
+image:
+  repository: 857392641205.dkr.ecr.eu-central-1.amazonaws.com/django-app
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+
+env:
+  DEBUG: "False"
+  SECRET_KEY: "p8hsd3ka#98a!i0n2_lm*e-3z^5h8p2r&z1@o3^tq8g7$kl6f"
+  ALLOWED_HOSTS: "*"
