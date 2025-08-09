@@ -1,0 +1,51 @@
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  # Название HPA, обычно берется из .Chart.Name и .Release.Name
+  name: {{ include "my-microservice-project.fullname" . }}-hpa
+  labels:
+    {{- include "my-microservice-project.labels" . | nindent 4 }}
+spec:
+  # Ссылка на Deployment, который будет масштабироваться
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "my-microservice-project.fullname" . }}
+  # Минимальное количество подов
+  minReplicas: {{ .Values.autoscaling.minReplicas }}
+  # Максимальное количество подов
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          # Целевое использование CPU в процентах
+          averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          # Целевое использование памяти в процентах
+          averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+  # Поведение масштабирования (опционально, для более тонкой настройки)
+  # behavior:
+  #   scaleDown:
+  #     stabilizationWindowSeconds: 300
+  #     policies:
+  #       - type: Percent
+  #         value: 100
+  #         periodSeconds: 15
+  #   scaleUp:
+  #     stabilizationWindowSeconds: 0
+  #     policies:
+  #       - type: Percent
+  #         value: 100
+  #         periodSeconds: 15

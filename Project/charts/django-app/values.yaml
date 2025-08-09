@@ -1,0 +1,78 @@
+replicaCount: 1 # Кількість подів для Deployment
+
+image:
+  repository: 857392641205.dkr.ecr.eu-central-1.amazonaws.com/my-microservice-project
+  pullPolicy: IfNotPresent # Політика отримання образу: Always, Never, IfNotPresent
+  # tag: "1.0.0" # Перевизначає appVersion з Chart.yaml, якщо вказано
+
+imagePullSecrets: [] # Список секретів для отримання образу з приватного репозиторію
+nameOverride: "" # Перевизначає ім'я чарту
+fullnameOverride: "" # Перевизначає повне ім'я чарту
+
+serviceAccount:
+  create: true # Чи створювати ServiceAccount
+  annotations: {} # Анотації для ServiceAccount
+  name: "" # Ім'я ServiceAccount. Якщо порожнє, буде згенеровано
+
+podAnnotations: {} # Анотації для подів
+podSecurityContext:
+  {} # Контекст безпеки для подів
+  # fsGroup: 2000
+
+securityContext:
+  {} # Контекст безпеки для контейнерів
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP # Тип Service: ClusterIP, NodePort, LoadBalancer
+  port: 80 # Порт, який буде відкритий Service (для зовнішнього доступу)
+
+ingress:
+  enabled: false # Чи вмикати Ingress
+  className: "" # Клас Ingress
+  annotations:
+    {} # Анотації для Ingress
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local # Замініть на ваш домен
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: [] # Конфігурація TLS для Ingress
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  {} # Запити та ліміти ресурсів для контейнера
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false # Чи вмикати Horizontal Pod Autoscaler (HPA)
+  minReplicas: 1 # Мінімальна кількість подів
+  maxReplicas: 10 # Максимальна кількість подів
+  targetCPUUtilizationPercentage: 80 # Цільове використання CPU у відсотках (для HPA)
+  # targetMemoryUtilizationPercentage: 80 # Цільове використання пам'яті у відсотках (для HPA)
+
+nodeSelector: {} # Node Selector для подів
+affinity: {} # Affinity для подів
+tolerations: [] # Tolerations для подів
+
+# Конфігурація змінних оточення для застосунку (використовується в ConfigMap)
+config:
+  database:
+    name: "mydb" # Ім'я бази даних
+    user: "dbuser" # Користувач бази даних
+    host: "module.rds.db_endpoint" # Хост бази даних (наприклад, з виведення модуля RDS)
+    port: 5432 # Порт бази даних
