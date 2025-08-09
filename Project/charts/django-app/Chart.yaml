@@ -1,0 +1,11 @@
+apiVersion: v2
+name: django-app
+description: A Helm chart for a Django application
+# Тип чарта. application - для приложений, library - для библиотек.
+type: application
+
+# Версия чарта. Увеличивайте ее при каждом изменении чарта.
+version: 0.1.0
+
+# Версия приложения. Это версия Docker образа вашего приложения.
+appVersion: "1.0.0"

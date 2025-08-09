@@ -1,0 +1,11 @@
+apiVersion: v2
+name: argo-cd-applications
+description: A Helm chart for deploying Argo CD Applications and Repositories
+# Тип чарта. application - для приложений, library - для библиотек.
+type: application
+
+# Версия чарта. Увеличивайте ее при каждом изменении чарта.
+version: 0.1.0
+
+# Версия приложения. В данном случае это версия Argo CD, с которой совместим чарт.
+appVersion: "2.x.x" # Совместимость с Argo CD 2.x
