@@ -1,0 +1,35 @@
+replicaCount: 2
+
+image:
+  repository: 857392641205.dkr.ecr.eu-central-1.amazonaws.com/django-app
+  pullPolicy: IfNotPresent
+  # ТЕГ ЗМІНЮВАТИМЕТЬСЯ JENKINS
+  tag: "latest"
+
+service:
+  type: LoadBalancer
+  port: 80
+
+config:
+  djangoSecretKey: "lbd_pf#xj(_#n0(5yvqop9i-w)&3(^!q0o^!xgw)#^j5m%f7m+"
+  debug: "True"
+  allowedHosts: "*" # Змініть для продакшну
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+hpa:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+
+env:
+  DEBUG: "False"
+  SECRET_KEY: "p8hsd3ka#98a!i0n2_lm*e-3z^5h8p2r&z1@o3^tq8g7$kl6f"
+  ALLOWED_HOSTS: "*"
